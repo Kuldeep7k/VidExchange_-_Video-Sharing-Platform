@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  MyVideos
+{% endblock %}
+
+{% block main %}
+  <h2 class="text-center">MyVideos <i class="fa-sharp fa-solid fa-film"></i></h2>
+  <div class="row mt-4">
+    {% if data %}
+      {% for video in data %}
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+          <div class="card border-primary shadow-sm h-100">
+            <div class="card-body">
+              <!-- Video Title -->
+              <h5 class="card-title">{{ video['title'] }}</h5>
+
+              <!-- Video Description -->
+              {% if video['description'] %}
+                <p class="card-text"><strong>Description:</strong> {{ video['description'] | capitalize }}</p>
+              {% endif %}
+
+              <!-- Video Date and Visibility -->
+              <p class="card-text"><strong>Date:</strong> <small class="text-muted">{{ video['upload_date'] }}</small></p>
+              <p class="card-text">
+                <strong>Visibility:</strong> 
+                {% if video['visibility'] == 'public' %}
+                    <span class="badge bg-success">{{ video['visibility'] | capitalize }}</span>
+                {% else %}
+                    <span class="badge bg-danger">{{ video['visibility'] | capitalize }}</span>
+                {% endif %}
+              </p>
+
+              <!-- Play Button -->
+              <form action="/play" method="post" class="text-center mb-2">
+                <input type="hidden" name="link" value="{{ video['public_video_id'] }}" />
+                <button class="btn btn-warning w-100 custom-border">Play <i class="fa-sharp fa-solid fa-play"></i></button>
+              </form>
+
+              <!-- Download Permission -->
+              <form action="/downloadPermission" method="post" class="text-center mb-3">
+                <input type="hidden" name="link" value="{{ video['public_video_id'] }}" />
+                <label for="permissionBtn{{ loop.index }}" class="form-label">Download Permission:</label>
+                <button id="permissionBtn{{ loop.index }}" 
+                        class="btn w-100 
+                        {% if video['download_permission'] == 'allowed' %} 
+                          btn-danger 
+                        {% else %} 
+                          btn-success 
+                        {% endif %}">
+                  {% if video['download_permission'] == 'allowed' %}
+                    Disable Download
+                  {% else %}
+                    Enable Download
+                  {% endif %}
+                </button>
+              </form>
+
+              <!-- Copy Link Functionality -->
+              {% if video['visibility'] == "public" %}
+                  <button id="copyButton{{ loop.index }}" onclick="linkCopy('myInput{{ loop.index }}')" class="btn btn-secondary w-100">Share Link <i class="fas fa-copy"></i></button>
+                  <input type="text" id="myInput{{ loop.index }}" hidden value="{{ video['public_video_id'] }}" />
+                  <p id="message{{ loop.index }}"></p>
+              {% endif %}
+
+              <!-- Options Button that Expands Additional Options -->
+              <div class="text-center">
+                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#optionsSection{{ loop.index }}" aria-expanded="false" aria-controls="optionsSection{{ loop.index }}">
+                  Modify: <i class="fa-duotone fa-solid fa-bars"></i>
+                </button>
+              </div>
+
+              <!-- Collapsible Options Section -->
+              <div class="collapse mt-2" id="optionsSection{{ loop.index }}">
+                <div class="border p-3 mt-2 bg-light">
+                  <form action="/delete" method="post" class="mb-2">
+                    <input type="hidden" name="link" value="{{ video['public_video_id'] }}" />
+                    <button type="submit" class="btn btn-danger w-100">Delete Video <i class="fa-sharp fa-solid fa-trash"></i></button>
+                  </form>
+                  <form action="/download" method="post" class="mb-2">
+                    <input type="hidden" name="link" value="{{ video['public_video_id'] }}" />
+                    <button type="submit" class="btn btn-secondary w-100 custom-border">Download Video <i class="fa-solid fa-download"></i></button>
+                  </form>
+
+                  {% if video['visibility'] == 'public' %}
+                    <form action="/share" method="post" class="mb-2">
+                      <input type="hidden" name="link" value="{{ video['public_video_id'] }}" />
+                      <button type="submit" class="btn btn-danger w-100">Remove Share</button>
+                    </form>
+                  {% else %}
+                    <form action="/share" method="post" class="mb-2">
+                      <input type="hidden" name="link" value="{{ video['public_video_id'] }}" />
+                      <button type="submit" class="btn btn-success w-100">Share Video <i class="fa-solid fa-share"></i></button>
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center fs-5">No video available. Please upload!</p>
+    {% endif %}
+  </div>
+
+  <script>
+    function linkCopy(inputId) {
+      // Get the text field
+      var copyText = document.getElementById(inputId);
+  
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value)
+          .then(() => {
+              // Show a message that the text has been copied
+              const message = document.getElementById("message" + inputId.slice(-1)); // Get the corresponding message element
+              message.textContent = "Copied to clipboard";
+  
+              // Remove the message after 5 seconds
+              setTimeout(() => {
+                  message.textContent = '';
+              }, 5000);
+          })
+          .catch(err => {
+              console.error('Error copying text: ', err);
+          });
+    }
+  </script>
+{% endblock %}

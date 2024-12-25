@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Register
+{% endblock %}
+
+{% block main %}
+
+<div class="container border py-3">
+    <h2 class="text-center">Register <i class="fa-regular fa-address-card"></i></h2>
+    <form action="/register" method="POST">
+        
+        <div class="mb-3">
+            <label for="userName" class="form-label">UserName:</label>
+            <input type="text" name="username" id="userName" class="form-control border-info" placeholder="username" required />
+        </div>
+        
+        <div class="mb-3">
+            <label for="emailInput" class="form-label">Email address:</label>
+            <input type="email" name="email" class="form-control border-info" id="emailInput" placeholder="name@example.com" required />
+        </div>
+        
+        <div class="mb-3">
+            <label for="passwordInput" class="form-label">Password:</label>
+            <input type="password" name="password" id="passwordInput" class="form-control border-info" placeholder="Password" required />
+            <div id="passwordHelpBlock" class="form-text">
+                Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters.
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="confirmPasswordInput" class="form-label">Confirm Password:</label>
+            <input type="password" name="confirm_password" id="confirmPasswordInput" class="form-control border-info" placeholder="Re-enter your password" required />
+        </div>
+        
+        <div class="mb-3 mt-3">
+            <input type="submit" id="submit" class="form-control btn btn-primary w-100 custom-border" value="Register" />
+        </div>
+        <div class="mb-3 mt-3 text-center">
+            Already have an account? 
+            <div>
+                <a href="/login" class="btn btn-link">
+                    <button type="button" class="btn btn-info">Login here</button>
+                </a>
+            </div>
+        </div>
+        
+        
+    </form>
+</div>
+
+{% endblock %}

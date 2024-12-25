@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Login
+{% endblock %}
+
+{% block main %}
+
+<div class="container border py-3">
+    <h2 class="text-center">Login <i class="fa-regular fa-address-card"></i></h2>
+    <form action="/login" method="POST">
+        <div class="mb-3">
+            <label for="emailInput" class="form-label">Email address:</label>
+            <input type="email" name="email" class="form-control border-info" id="emailInput" placeholder="name@example.com" required />
+        </div>
+        
+        <div class="mb-3">
+            <label for="passwordInput" class="form-label">Password:</label>
+            <input type="password" name="password" id="passwordInput" class="form-control border-info" placeholder="Password" required />
+        </div>
+        
+        <div class="mb-3 mt-3">
+            <input type="submit" id="submit" class="form-control btn btn-primary w-100 custom-border" value="Login" />
+        </div>
+      
+        <div class="mb-3 mt-4 text-center">
+            New here? Create a new Account 
+            <div>
+                <a href="/register" class="btn btn-link">
+                    <button type="button" class="btn btn-info">Register here</button>
+                </a>
+            </div>
+        </div>
+        
+        
+    </form>
+</div>
+
+{% endblock %}

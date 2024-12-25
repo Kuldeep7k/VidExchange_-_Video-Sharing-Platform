@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <h2 class="text-center">Profile <i class="fa-solid fa-user"></i></h2>
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h3> <i class="fa-solid fa-signature"></i> {{ user_data.username | capitalize }}</h3>
+            <h3><i class="fa-regular fa-envelope"></i> {{ user_data.email }}</h3>
+        </div>
+    </div>
+
+    <!-- Change Username Section -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <h5>Change Username</h5>
+            <form action="/changeusername" method="POST">
+                <div class="mb-3">
+                    <label for="CurrentUsername" class="form-label">Current Username:</label>
+                    <input type="text" name="currentUsername" id="CurrentUsername" class="form-control border-info border-info" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newUsername" class="form-label">New Username:</label>
+                    <input type="text" name="newUsername" id="newUsername" class="form-control border-info" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 custom-border">Change Username</button>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <h5>Change Password</h5>
+            <form action="/changepassword" method="POST">
+                <div class="mb-3">
+                    <label for="Current_password" class="form-label">Current Password:</label>
+                    <input type="password" name="current_password" id="Current_password" class="form-control border-info" required>
+                </div>
+                <div class="mb-3">
+                    <label for="New_password" class="form-label">New Password:</label>
+                    <input type="password" name="new_password" id="New_password" class="form-control border-info" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirm New Password:</label>
+                    <input type="password" name="confirm_password" id="confirm_password" class="form-control border-info" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 custom-border">Change Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% block main %}
+  <!-- Title Section -->
+  <h2 class="text-center text-primary">Upload <span class="text-danger">&</span> Exchange <span class="text-danger">Videos!</span></h2>
+
+  <!-- Upload Section -->
+  <div class="Upload-section border p-3 mt-1">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="formFileLg" class="form-label">Click Here:</label>
+        <input class="form-control form-control-lg custom-border border border-primary" id="formFileLg" type="file" name="video_file" accept="video/*,.MKV" required />
+      </div>
+      <div class="mb-3">
+        <label for="videoDescription" class="form-label">Description:</label>
+        <textarea class="form-control border border-primary" id="videoDescription" name="description" rows="2" maxlength="50" placeholder="(Optional) Enter a brief description of the video..."></textarea>
+      </div>
+      <div class="mb-3 text-center">
+        <input type="submit" id="submit" class="form-control bg-info fs-5 fw-bold custom-border" value="Upload" />
+      </div>
+    </form>
+  </div>
+
+  <!-- Recent Uploads Section -->
+  <div class="recent mt-4">
+    <h3>Recent Uploads:</h3>
+    {% if data %}
+      <!-- Responsive Table -->
+      <!-- Responsive Table -->
+      <div class="table-responsive">
+        <table class="table table-hover mt-2 p-2 rounded border">
+          <tbody>
+            {% for video in data %}
+              <tr class="border border-danger rounded-3 align-middle">
+                <td class="text-start fw-bold p-3">
+                  {{ video.title }}
+                  <br />
+                  {% if video.description %}
+                    Description:
+                    <small class="text-muted">{{ video.description|capitalize }}</small>
+                  {% endif %}
+                  <br />
+
+                  Date:
+                  <small class="text-muted">{{ video.upload_date }}</small>
+                  <br />
+                  <p class="card-text">
+                    <strong>Visibility:</strong>
+                    {% if video.visibility == 'public' %}
+                      <span class="badge bg-success">{{ video.visibility|capitalize }}</span>
+                    {% else %}
+                      <span class="badge bg-danger">{{ video.visibility|capitalize }}</span>
+                    {% endif %}
+                  </p>
+                </td>
+
+                <!-- Centering the button within the cell -->
+                <td class="text-center align-middle">
+                  <form action="/play" method="post">
+                    <input type="hidden" name="link" value="{{ video.public_video_id }}" />
+                    <input type="submit" value="Play Video" class="btn btn-warning custom-border" />
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-center fs-5">No video available. Please upload!</p>
+    {% endif %}
+  </div>
+{% endblock %}

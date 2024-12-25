@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Play Video
+{% endblock %}
+
+{% block main %}
+  <div class="container mt-4">
+    {% if videoTitle %}
+      <h2 class="mb-3 text-center">{{ videoTitle }}</h2>
+      <div class="text-center">
+        <video controls id="myVideo" class="img-fluid" controlsList="nodownload">
+          <source src="{{ url_for('serve_video', filename=videoData['title']) }}" type="video/mp4" />
+          <p>Your browser doesn't support HTML video.</p>
+        </video>
+        <br>
+        {% if videoData["download_permission"] == "allowed" %}
+        <form action="/download" method="post" class="mb-2">
+          <input type="hidden" name="link" value="{{ videoData['public_video_id'] }}" />
+          <button type="submit" class="btn btn-warning w-50 custom-border">Download Video <i class="fa-solid fa-download"></i></button>
+        </form>
+        {% endif %}
+      </div>
+
+      <!-- Video Details Section -->
+      <div class="mt-4">
+        <h5>Video Details</h5>
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Description:</strong> {{ videoData["description"] }}</li>
+          <li class="list-group-item">
+            <strong>Visibility:</strong> 
+            {% if videoData['visibility'] == 'public' %}
+                <span class="badge bg-success">{{ videoData['visibility'] | capitalize }}</span>
+            {% else %}
+                <span class="badge bg-danger">{{ videoData['visibility'] | capitalize }}</span>
+            {% endif %}
+          </li>
+          <li class="list-group-item"><strong>Upload Date:</strong> {{ videoData["upload_date"] }}</li>
+        </ul>
+      </div>
+
+      <p class="mt-2 text-center">
+        <a href="/myvideos" class="btn btn-primary">Back to My Videos</a>
+      </p>
+
+    {% else %}
+      <h2 class="text-center">Play <i class="fa-solid fa-play"></i></h2>
+      <div class="container mt-4">
+        <form action="/play" method="post">
+          <div class="mb-3 text-start">
+            <label for="playInput" class="form-label">Enter Video link:</label>
+            <input type="text" name="link" id="playInput" class="form-control border border-primary" placeholder="Enter your unique link" required />
+          </div>
+
+          <div class="mb-3 mt-3 text-center">
+            <input type="submit" value="Submit" class="btn btn-warning w-50" />
+          </div>
+        </form>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    document.getElementById('myVideo').addEventListener('contextmenu', function (event) {
+      event.preventDefault();
+    });
+  </script>
+{% endblock %}
